@@ -5,6 +5,7 @@
   </div>
   <div class="card-body">
     <form class="form" role="form" action="index.html" method="post">
+      {% csrf_token %}
       <div class="form-row">
         <div class="form-group col-md-4">
           <select class="form-control">

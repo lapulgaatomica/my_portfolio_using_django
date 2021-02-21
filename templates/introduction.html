@@ -1,29 +1,58 @@
 <div class="card">
+
   <div class="card-header">
-    <h1 class="text-center">About Me</h1>
+    <h1 class="text-center">
+      About Me
+      {% if user.is_superuser %}
+      <a href="{% url 'new_about' %}" class="btn btn-primary">
+      Add New "About Me"
+      </a>
+      {% endif %}
+    </h1>
   </div>
+
   <div class="card-body">
-    <p class="card-text text-justify">Hello I'm Odedoyin Akindele, a Junior Backend Web
-       Developer with less than six months of experience, I'm curently open
-       to internships and entry level roles in a company where I would be
-       able to put the skills I've acquired to good use for the growth of
-       the organization while I learn under the tutelage of worldclass software
-       engineers
+    {% for about in abouts %}
+    <p class="card-text text-justify">
+      {{about.paragraph}}
+       {% if user.is_superuser %}
+       <a href="#" class="btn btn-primary">Edit</a>
+       <a href="#" class="btn btn-danger">Delete</a>
+       {% endif %}
     </p>
+    {% endfor %}
 
     <div class="card-header">
       <h5 class="text-center">
         Competencies and Tech Stack
+        {% if user.is_superuser %}
+        <a href="{% url 'new_skill' %}" class="btn btn-sm btn-primary">
+          Add New Skill
+        </a>
+        {% endif %}
       </h5>
     </div>
+
     <div class="card-body">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">Python (Django, Flask)</li>
-        <li class="list-group-item">RDBMS (PostgreSQL)</li>
-        <li class="list-group-item">NoSQL (MongoDB)</li>
-        <li class="list-group-item">Development and Source Control (Docker, Git, Github)</li>
+        {% for competency in competencies %}
+        <li class="list-group-item">
+          <span class="col-md-6">
+            {{ competency.skill }}
+          </span>
+
+          {% if user.is_superuser %}
+          <span class="col-md-6">
+            <a href="#" class="btn btn-sm btn-primary">Edit</a>
+            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+          </span>
+          {% endif %}
+        </li>
+
+        {% endfor %}
       </ul>
     </div>
 
   </div>
+
 </div>
