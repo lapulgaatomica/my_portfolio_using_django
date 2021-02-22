@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <h1>Edit "{{competency.skill}}"</h1>
+  <form class="form" role="form" action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-primary" value="Edit">
+  </form>
+{% endblock content%}

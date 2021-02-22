@@ -16,8 +16,8 @@
     <p class="card-text text-justify">
       {{about.paragraph}}
        {% if user.is_superuser %}
-       <a href="#" class="btn btn-primary">Edit</a>
-       <a href="#" class="btn btn-danger">Delete</a>
+       <a href="{% url 'edit_about' about.id %}" class="btn btn-primary">Edit</a>
+       <a href="{% url 'delete_about' about.id %}" class="btn btn-danger">Delete</a>
        {% endif %}
     </p>
     {% endfor %}
@@ -43,8 +43,8 @@
 
           {% if user.is_superuser %}
           <span class="col-md-6">
-            <a href="#" class="btn btn-sm btn-primary">Edit</a>
-            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+            <a href="{% url 'edit_competency' competency.id %}" class="btn btn-sm btn-primary">Edit</a>
+            <a href="{% url 'delete_competency' competency.id %}" class="btn btn-sm btn-danger">Delete</a>
           </span>
           {% endif %}
         </li>
