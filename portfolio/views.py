@@ -14,12 +14,12 @@ class HomePageView(ListView):
         context['competencies'] = Competency.objects.all()
         return context
 
-class NewAbout(LoginRequiredMixin, CreateView):
+class NewAboutView(LoginRequiredMixin, CreateView):
     model = About
     fields = ['paragraph']
     template_name = 'new_aboutme.html'
 
-class NewSkill(LoginRequiredMixin, CreateView):
+class NewSkillView(LoginRequiredMixin, CreateView):
     model = Competency
     fields = ['skill']
     template_name = 'new_skill.html'

@@ -28,3 +28,24 @@ class HomepageTests(TestCase):
             view.func.__name__,
             HomePageView.as_view().__name__
         )
+
+class NewAboutViewTestsForNormalUsers(TestCase):
+
+    def setUp(self):
+        url = reverse('new_about')
+        self.response = self.client.get(url)
+
+    def test_about_view_status_code_for_non_super_user(self):
+        self.assertEqual(self.response.status_code, 302)
+
+
+class NewSkillViewTestsForNormalUsers(TestCase):
+
+    def setUp(self):
+        url = reverse('new_skill')
+        self.response = self.client.get(url)
+
+    def test_skill_view_status_code_for_non_super_user(self):
+        self.assertEqual(self.response.status_code, 302)
+
+#Reminder to create an newaboutview and newskillview tests for a superuser
