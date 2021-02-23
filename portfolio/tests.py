@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse, resolve
 
+from .models import About, Competency
 from .views import HomePageView, NewAboutView, NewSkillView
 
 class HomepageTests(TestCase):
@@ -20,8 +21,8 @@ class HomepageTests(TestCase):
         self.assertContains(self.response, 'Odedoyin Akindele')
 
     def test_homepage_does_not_contain_incorrect_html(self):
-        self.assertNotContains(
-            self.response, 'lmao')
+        self.assertNotContains(self.response, 'Add New "About Me"')
+        self.assertNotContains(self.response, 'Add New Skill')
 
     def test_homepage_url_resolves_homepageview(self):
         view = resolve('/')
@@ -30,7 +31,20 @@ class HomepageTests(TestCase):
             HomePageView.as_view().__name__
         )
 
-    # add tests that ascertain that there is "add new "about me"" and "add new skill" buttons on the homepage when superuser is logged in
+class HomepageTestsForSuperUser(TestCase):
+    def setUp(self):
+        self.super_user = get_user_model().objects.create_superuser(
+            username='delesuper',
+            email='dele@super.com',
+            password='password'
+        )
+        self.client.login(username='delesuper', password='password')
+        url = reverse('home')
+        self.response = self.client.get(url)
+
+    def test_homepage_contains_correct_html(self):
+        self.assertContains(self.response, 'Add New "About Me"')
+        self.assertContains(self.response, 'Add New Skill')
 
 class NewAboutViewTestsForNormalUsers(TestCase):
 
