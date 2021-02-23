@@ -8,7 +8,9 @@ from .views import (
         NewAboutView,
         NewSkillView,
         UpdateAboutView,
-        UpdateSkillView
+        UpdateSkillView,
+        DeleteAboutView,
+        DeleteSkillView
     )
 
 class HomepageTests(TestCase):
@@ -137,6 +139,51 @@ class UpdateAboutViewTestsForSuperUsers(TestCase):
             UpdateAboutView.as_view().__name__
         )
 
+class DeleteAboutViewTestsForNormalUsers(TestCase):
+
+    def setUp(self):
+        self.about = About.objects.create(
+            paragraph='I am a backend developer'
+        )
+        url = reverse('delete_about', args=[str(self.about.id)])
+        self.response = self.client.get(url)
+
+    def test_delete_about_view_status_code_for_non_super_user(self):
+        self.assertEqual(self.response.status_code, 302)
+
+class DeleteAboutViewTestsForSuperUsers(TestCase):
+
+    def setUp(self):
+        get_user_model().objects.create_superuser(
+            username='delesuper',
+            email='dele@super.com',
+            password='password'
+        )
+        self.client.login(username='delesuper', password='password')
+        self.about = About.objects.create(
+            paragraph='I am a backend developer'
+        )
+        url = reverse('delete_about', args=[str(self.about.id)])
+        self.response = self.client.get(url)
+
+    def test_delete_about_view_status_code_for_super_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_delete_about_template_used(self):
+        self.assertTemplateUsed(self.response, 'delete_aboutme.html')
+
+    def test_delete_about_contains_correct_html(self):
+        self.assertContains(self.response, 'Delete "About Me"')
+        self.assertContains(self.response,
+         'Are you sure you want to delete I am a backend developer?')
+
+    def test_delete_about_url_resolves_delete_about_view(self):
+        view = resolve(f'/aboutme/{self.about.id}/delete')
+        self.assertEqual(
+            view.func.__name__,
+            DeleteAboutView.as_view().__name__
+        )
+
 class NewSkillViewTestsForNormalUsers(TestCase):
 
     def setUp(self):
@@ -222,6 +269,50 @@ class UpdateSkillViewTestsForSuperUsers(TestCase):
             UpdateSkillView.as_view().__name__
         )
 
+class DeleteSkillViewTestsForNormalUsers(TestCase):
 
-# Reminder to create a delete aboutview and skillview tests for a superuser
-# Reminder to test models
+    def setUp(self):
+        self.competency = Competency.objects.create(
+            skill='Development and Source Control (Docker, Git, Github)'
+        )
+        url = reverse('delete_skill', args=[str(self.competency.id)])
+        self.response = self.client.get(url)
+
+    def test_delete_skill_view_status_code_for_non_super_user(self):
+        self.assertEqual(self.response.status_code, 302)
+
+class DeleteSkillViewTestsForSuperUsers(TestCase):
+
+    def setUp(self):
+        get_user_model().objects.create_superuser(
+            username='delesuper',
+            email='dele@super.com',
+            password='password'
+        )
+        self.client.login(username='delesuper', password='password')
+        self.competency = Competency.objects.create(
+            skill='Development and Source Control (Docker, Git, Github)'
+        )
+        url = reverse('delete_skill', args=[str(self.competency.id)])
+        self.response = self.client.get(url)
+
+    def test_delete_skill_view_status_code_for_super_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_delete_skill_template_used(self):
+        self.assertTemplateUsed(self.response, 'delete_skill.html')
+
+    def test_delete_skill_contains_correct_html(self):
+        self.assertContains(self.response, 'Delete Skill')
+        self.assertContains(self.response,
+         'Are you sure you want to delete Development and Source Control (Docker, Git, Github)?')
+
+    def test_delete_skill_url_resolves_update_skill_view(self):
+        view = resolve(f'/skill/{self.competency.id}/delete')
+        self.assertEqual(
+            view.func.__name__,
+            DeleteSkillView.as_view().__name__
+        )
+
+# Remider to actually test submit, edit and delete of data not just the views and templates
+# Reminder to folloe the DRY principle and stop writing the exact same login code in every testclass
