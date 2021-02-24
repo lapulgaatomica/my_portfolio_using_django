@@ -42,7 +42,7 @@ class HomepageTests(TestCase):
 class HomepageTestsForSuperUser(TestCase):
 
     def setUp(self):
-        self.super_user = get_user_model().objects.create_superuser(
+        get_user_model().objects.create_superuser(
             username='delesuper',
             email='dele@super.com',
             password='password'
@@ -64,7 +64,7 @@ class NewAboutViewTestsForNormalUsers(TestCase):
     def test_about_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
 
-class NewAboutViewTestsForSuperUsers(TestCase):
+class GETNewAboutViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
         get_user_model().objects.create_superuser(
@@ -93,6 +93,28 @@ class NewAboutViewTestsForSuperUsers(TestCase):
             view.func.__name__,
             NewAboutView.as_view().__name__
         )
+
+
+class POSTNewAboutViewTestsForSuperUsers(TestCase):
+
+    def setUp(self):
+        get_user_model().objects.create_superuser(
+            username='delesuper',
+            email='dele@super.com',
+            password='password'
+        )
+        self.client.login(username='delesuper', password='password')
+        url = reverse('new_about')
+        self.post_response = self.client.post(url, {'paragraph':'I am a new aboutme'}, follow=True)
+
+    def test_status_code(self):
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_template_used(self):
+        self.assertTemplateUsed(self.post_response, 'home.html')
+
+    def test_contains_correct_text(self):
+        self.assertContains(self.post_response, 'I am a new aboutme')
 
 class UpdateAboutViewTestsForNormalUsers(TestCase):
 
@@ -222,6 +244,27 @@ class NewSkillViewTestsForSuperUsers(TestCase):
             view.func.__name__,
             NewSkillView.as_view().__name__
         )
+
+class POSTNewSkillViewTestsForSuperUsers(TestCase):
+
+    def setUp(self):
+        get_user_model().objects.create_superuser(
+            username='delesuper',
+            email='dele@super.com',
+            password='password'
+        )
+        self.client.login(username='delesuper', password='password')
+        url = reverse('new_skill')
+        self.post_response = self.client.post(url, {'skill':'Devops'}, follow=True)
+
+    def test_status_code(self):
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_template_used(self):
+        self.assertTemplateUsed(self.post_response, 'home.html')
+
+    def test_contains_correct_text(self):
+        self.assertContains(self.post_response, 'Devops')
 
 class UpdateSkillViewTestsForNormalUsers(TestCase):
 
