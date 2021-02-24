@@ -64,7 +64,7 @@ class NewAboutViewTestsForNormalUsers(TestCase):
     def test_about_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
 
-class GETNewAboutViewTestsForSuperUsers(TestCase):
+class NewAboutViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
         get_user_model().objects.create_superuser(
@@ -75,6 +75,7 @@ class GETNewAboutViewTestsForSuperUsers(TestCase):
         self.client.login(username='delesuper', password='password')
         url = reverse('new_about')
         self.response = self.client.get(url)
+        self.post_response = self.client.post(url, {'paragraph':'I am a new aboutme'}, follow=True)
 
     def test_new_about_view_status_code_for_super_user(self):
         self.assertEqual(self.response.status_code, 200)
@@ -94,26 +95,13 @@ class GETNewAboutViewTestsForSuperUsers(TestCase):
             NewAboutView.as_view().__name__
         )
 
-
-class POSTNewAboutViewTestsForSuperUsers(TestCase):
-
-    def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
-        url = reverse('new_about')
-        self.post_response = self.client.post(url, {'paragraph':'I am a new aboutme'}, follow=True)
-
-    def test_status_code(self):
+    def test_post_status_code(self):
         self.assertEqual(self.post_response.status_code, 200)
 
-    def test_template_used(self):
+    def test_post_template_used(self):
         self.assertTemplateUsed(self.post_response, 'home.html')
 
-    def test_contains_correct_text(self):
+    def test_post_contains_correct_text(self):
         self.assertContains(self.post_response, 'I am a new aboutme')
 
 class UpdateAboutViewTestsForNormalUsers(TestCase):
@@ -142,6 +130,7 @@ class UpdateAboutViewTestsForSuperUsers(TestCase):
         )
         url = reverse('edit_about', args=[str(self.about.id)])
         self.response = self.client.get(url)
+        self.post_response = self.client.post(url, {'paragraph': 'Edited I am a backend developer'}, follow=True)
 
     def test_update_about_view_status_code_for_super_user(self):
         self.assertEqual(self.response.status_code, 200)
@@ -160,6 +149,15 @@ class UpdateAboutViewTestsForSuperUsers(TestCase):
             view.func.__name__,
             UpdateAboutView.as_view().__name__
         )
+
+    def test_post_status_code(self):
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_post_template_used(self):
+        self.assertTemplateUsed(self.post_response, 'home.html')
+
+    def test_post_contains_correct_text(self):
+        self.assertContains(self.post_response, 'Edited I am a backend developer')
 
 class DeleteAboutViewTestsForNormalUsers(TestCase):
 
@@ -187,6 +185,7 @@ class DeleteAboutViewTestsForSuperUsers(TestCase):
         )
         url = reverse('delete_about', args=[str(self.about.id)])
         self.response = self.client.get(url)
+        self.post_response = self.client.post(url, follow=True)
 
     def test_delete_about_view_status_code_for_super_user(self):
         self.assertEqual(self.response.status_code, 200)
@@ -205,6 +204,15 @@ class DeleteAboutViewTestsForSuperUsers(TestCase):
             view.func.__name__,
             DeleteAboutView.as_view().__name__
         )
+
+    def test_post_status_code(self):
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_post_template_used(self):
+        self.assertTemplateUsed(self.post_response, 'home.html')
+
+    def test_post_contains_correct_text(self):
+        self.assertNotContains(self.post_response, 'I am a backend developer')
 
 class NewSkillViewTestsForNormalUsers(TestCase):
 
@@ -226,6 +234,7 @@ class NewSkillViewTestsForSuperUsers(TestCase):
         self.client.login(username='delesuper', password='password')
         url = reverse('new_skill')
         self.response = self.client.get(url)
+        self.post_response = self.client.post(url, {'skill':'Devops'}, follow=True)
 
     def test_new_skill_view_status_code_for_super_user(self):
         self.assertEqual(self.response.status_code, 200)
@@ -244,18 +253,6 @@ class NewSkillViewTestsForSuperUsers(TestCase):
             view.func.__name__,
             NewSkillView.as_view().__name__
         )
-
-class POSTNewSkillViewTestsForSuperUsers(TestCase):
-
-    def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
-        url = reverse('new_skill')
-        self.post_response = self.client.post(url, {'skill':'Devops'}, follow=True)
 
     def test_status_code(self):
         self.assertEqual(self.post_response.status_code, 200)
@@ -292,6 +289,7 @@ class UpdateSkillViewTestsForSuperUsers(TestCase):
         )
         url = reverse('edit_skill', args=[str(self.competency.id)])
         self.response = self.client.get(url)
+        self.post_response = self.client.post(url, {'skill':'Development and Source Control (Docker, Git, Github, Kubernetes)'}, follow=True)
 
     def test_update_skill_view_status_code_for_super_user(self):
         self.assertEqual(self.response.status_code, 200)
@@ -311,6 +309,15 @@ class UpdateSkillViewTestsForSuperUsers(TestCase):
             view.func.__name__,
             UpdateSkillView.as_view().__name__
         )
+
+    def test_status_code(self):
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_template_used(self):
+        self.assertTemplateUsed(self.post_response, 'home.html')
+
+    def test_contains_correct_text(self):
+        self.assertContains(self.post_response, 'Development and Source Control (Docker, Git, Github, Kubernetes)')
 
 class DeleteSkillViewTestsForNormalUsers(TestCase):
 
@@ -338,6 +345,7 @@ class DeleteSkillViewTestsForSuperUsers(TestCase):
         )
         url = reverse('delete_skill', args=[str(self.competency.id)])
         self.response = self.client.get(url)
+        self.post_response = self.client.post(url, follow=True)
 
     def test_delete_skill_view_status_code_for_super_user(self):
         self.assertEqual(self.response.status_code, 200)
@@ -357,5 +365,13 @@ class DeleteSkillViewTestsForSuperUsers(TestCase):
             DeleteSkillView.as_view().__name__
         )
 
-# Remider to actually test submit, edit and delete of data not just the views and templates
+    def test_post_status_code(self):
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_post_template_used(self):
+        self.assertTemplateUsed(self.post_response, 'home.html')
+
+    def test_post_contains_correct_text(self):
+        self.assertNotContains(self.post_response, 'Development and Source Control (Docker, Git, Github)')
+
 # Reminder to folloe the DRY principle and stop writing the exact same login code in every testclass
