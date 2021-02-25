@@ -4,10 +4,7 @@
     <p class="text-center">Have a question you want me to answer? Want to hire me for a job/gig? Want to say hi to me? Please do so below, I would love to hear from you.
       {% if user.is_superuser %}
       <br>
-      <a class="btn btn-link" href="{% url 'new_reason' %}">
-        Add New Reason
-      </a>
-      <a class="btn btn-link" href="{% url 'reasons' %}">Edit, Remove or View Reasons</a>
+      <a class="btn btn-link" href="{% url 'reasons' %}">Add, Edit, Remove or View Reasons</a>
       {% endif %}
     </p>
 

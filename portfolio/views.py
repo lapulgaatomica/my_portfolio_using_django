@@ -49,7 +49,6 @@ class DeleteSkillView(LoginRequiredMixin, DeleteView):
 class NewReasonView(LoginRequiredMixin, CreateView):
     model = Reason
     fields = ['purpose']
-    template_name = 'new_reason.html'
 
 class ReasonsView(LoginRequiredMixin, ListView):
     model = Reason

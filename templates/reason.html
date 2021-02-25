@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="row">
+<div class="col-md-6">
 <table class="table table-responsive">
   <thead>
     <tr>
@@ -25,4 +27,18 @@
   </tbody>
   {% endfor %}
 </table>
+</div>
+<div class="col-md-6">
+<h1>Add New Reason</h1>
+<form class="form" role="form" action="{% url 'new_reason' %}" method="post">
+  {% csrf_token %}
+  <div id="div_id_purpose" class="form-group">
+    <div class="">
+      <input type="text" name="purpose" maxlength="25" class="textinput textInput form-control" placeholder="purpose..." required id="id_purpose">
+     </div>
+  </div>
+  <input type="submit" class="btn btn-primary btn-block" value="Submit">
+</form>
+</div>
+</div>
 {% endblock content%}
