@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from .models import About, Competency
+from .models import About, Competency, Reason
 
 class HomePageView(ListView):
     model = About
@@ -13,6 +13,7 @@ class HomePageView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['competencies'] = Competency.objects.all()
+        context['reasons'] = Reason.objects.all()
         return context
 
 class NewAboutView(LoginRequiredMixin, CreateView):
@@ -44,3 +45,23 @@ class DeleteSkillView(LoginRequiredMixin, DeleteView):
     model = Competency
     template_name = 'delete_skill.html'
     success_url = reverse_lazy('home')
+
+class NewReasonView(LoginRequiredMixin, CreateView):
+    model = Reason
+    fields = ['purpose']
+    template_name = 'new_reason.html'
+
+class ReasonsView(LoginRequiredMixin, ListView):
+    model = Reason
+    context_object_name = 'reasons'
+    template_name = 'reason.html'
+
+class UpdateReasonView(LoginRequiredMixin, UpdateView):
+    model = Reason
+    fields = ['purpose']
+    template_name = 'update_reason.html'
+
+class DeleteReasonView(LoginRequiredMixin, DeleteView):
+    model = Reason
+    template_name = 'delete_reason.html'
+    success_url = reverse_lazy('reasons')

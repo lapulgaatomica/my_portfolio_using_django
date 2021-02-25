@@ -18,3 +18,12 @@ class Competency(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
+
+class Reason(models.Model):
+    purpose = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.purpose
+
+    def get_absolute_url(self):
+        return reverse('reasons')

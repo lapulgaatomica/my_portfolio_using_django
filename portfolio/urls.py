@@ -6,8 +6,11 @@ from .views import (
     DeleteAboutView,
     NewSkillView,
     UpdateSkillView,
-    DeleteSkillView
-    )
+    DeleteSkillView,
+    NewReasonView,
+    ReasonsView,
+    UpdateReasonView,
+    DeleteReasonView)
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
@@ -17,4 +20,8 @@ urlpatterns = [
     path('skill/new', NewSkillView.as_view(), name='new_skill'),
     path('skill/<int:pk>/edit', UpdateSkillView.as_view(), name='edit_skill'),
     path('skill/<int:pk>/delete', DeleteSkillView.as_view(), name='delete_skill'),
+    path('reasons', ReasonsView.as_view(), name='reasons'),
+    path('reasons/new', NewReasonView.as_view(), name='new_reason'),
+    path('reasons/<int:pk>/edit', UpdateReasonView.as_view(), name='edit_reason'),
+    path('reasons/<int:pk>/delete', DeleteReasonView.as_view(), name='delete_reason'),
 ]

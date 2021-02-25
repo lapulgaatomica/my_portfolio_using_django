@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table table-responsive">
+  <thead>
+    <tr>
+      <th scope="col">Reason</th>
+    </tr>
+  </thead>
+  {% for reason in reasons %}
+  <tbody>
+    <tr>
+      <td>{{ reason.purpose }}</td>
+      <td>
+        <a class="btn btn-primary" href="{% url 'edit_reason' reason.id %}">
+          Edit
+        </a>
+      </td>
+      <td>
+        <a class="btn btn-danger" href="{% url 'delete_reason' reason.id %}">
+          Delete
+        </a>
+      </td>
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
+{% endblock content%}

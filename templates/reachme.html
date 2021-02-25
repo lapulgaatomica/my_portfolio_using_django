@@ -1,29 +1,38 @@
 <div class="card">
   <div class="card-header">
     <h5 class="text-center">Contact Me</h5>
-    <p class="text-center">Have a question you want me to answer? Want to hire me for a job/gig? Want to say hi to me? Please do so below, I would love to hear from you.</p>
+    <p class="text-center">Have a question you want me to answer? Want to hire me for a job/gig? Want to say hi to me? Please do so below, I would love to hear from you.
+      {% if user.is_superuser %}
+      <br>
+      <a class="btn btn-link" href="{% url 'new_reason' %}">
+        Add New Reason
+      </a>
+      <a class="btn btn-link" href="{% url 'reasons' %}">Edit, Remove or View Reasons</a>
+      {% endif %}
+    </p>
+
   </div>
   <div class="card-body">
     <form class="form" role="form" action="index.html" method="post">
       {% csrf_token %}
       <div class="form-row">
         <div class="form-group col-md-4">
-          <select class="form-control">
-            <option selected>Purpose</option>
-            <option value="1">I Have Questions</option>
-            <option value="2">I Want to Hire You</option>
-            <option value="3">I Want to Greet You</option>
+          <select name="purpose" required class="form-control">
+            <option value="" selected>Reason</option>
+            {% for reason in reasons %}
+              <option value="{{ readon.id }}">{{ reason.purpose }}</option>
+            {% endfor %}
           </select>
         </div>
         <div class="form-group col-md-4">
-          <input class="form-control" type="text" placeholder="Your name...." autocomplete="false" name="" value="">
+          <input class="form-control" type="text" required placeholder="Your name...." autocomplete="false" name="name" value="">
         </div>
         <div class="form-group col-md-4">
-          <input class="form-control" type="email" placeholder="Your e-mail address..." name="" value="">
+          <input class="form-control" type="email" required placeholder="Your e-mail address..." name="email" value="">
         </div>
       </div>
       <div class="form-group">
-        <textarea placeholder="Your message...." class="form-control" rows="4"></textarea>
+        <textarea placeholder="Your message...." required name="message" class="form-control" rows="4"></textarea>
       </div>
       <div class="for-group">
         <input class="btn btn-primary btn-lg btn-block" type="submit" value="Send">
