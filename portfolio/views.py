@@ -46,14 +46,15 @@ class DeleteSkillView(LoginRequiredMixin, DeleteView):
     template_name = 'delete_skill.html'
     success_url = reverse_lazy('home')
 
-class NewReasonView(LoginRequiredMixin, CreateView):
-    model = Reason
-    fields = ['purpose']
 
 class ReasonsView(LoginRequiredMixin, ListView):
     model = Reason
     context_object_name = 'reasons'
     template_name = 'reason.html'
+
+class NewReasonView(LoginRequiredMixin, CreateView):
+    model = Reason
+    fields = ['purpose']
 
 class UpdateReasonView(LoginRequiredMixin, UpdateView):
     model = Reason

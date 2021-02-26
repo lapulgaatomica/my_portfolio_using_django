@@ -7,8 +7,8 @@ from .views import (
     NewSkillView,
     UpdateSkillView,
     DeleteSkillView,
-    NewReasonView,
     ReasonsView,
+    NewReasonView,
     UpdateReasonView,
     DeleteReasonView)
 

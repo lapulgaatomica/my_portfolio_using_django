@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse, resolve
 
-from .models import About, Competency
+from .models import About, Competency, Reason
 from .views import (
         HomePageView,
         NewAboutView,
@@ -10,7 +10,11 @@ from .views import (
         UpdateAboutView,
         UpdateSkillView,
         DeleteAboutView,
-        DeleteSkillView
+        DeleteSkillView,
+        ReasonsView,
+        NewReasonView,
+        UpdateReasonView,
+        DeleteReasonView
     )
 
 class HomepageTests(TestCase):
@@ -374,4 +378,82 @@ class DeleteSkillViewTestsForSuperUsers(TestCase):
     def test_post_contains_correct_text(self):
         self.assertNotContains(self.post_response, 'Development and Source Control (Docker, Git, Github)')
 
-# Reminder to folloe the DRY principle and stop writing the exact same login code in every testclass
+
+class ReasonsViewTestsForNormalUsers(TestCase):
+
+    def setUp(self):
+        url = reverse('reasons')
+        self.response = self.client.get(url)
+
+    def test_reason_view_status_code_for_normal_user(self):
+        self.assertEqual(self.response.status_code, 302)
+
+
+class ReasonsViewTestsForSuperUsers(TestCase):
+
+    def setUp(self):
+        get_user_model().objects.create_superuser(
+            username='delesuper',
+            email='dele@super.com',
+            password='password'
+        )
+        self.client.login(username='delesuper', password='password')
+        url = reverse('reasons')
+        self.response = self.client.get(url)
+
+    def test_reasons_page_status_code(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_reasons_page_template(self):
+        self.assertTemplateUsed(self.response, 'reason.html')
+
+    def test_reasons_page_contains_correct_html(self):
+        self.assertContains(self.response, 'Add New Reason')
+
+    def test_reasons_page_does_not_contain_incorrect_html(self):
+        self.assertNotContains(self.response, 'Add New "About Me"')
+        self.assertNotContains(self.response, 'Add New Skill')
+
+    def test_reasons_page_url_resolves_homepageview(self):
+        view = resolve('/reasons')
+        self.assertEqual(
+            view.func.__name__,
+            ReasonsView.as_view().__name__
+        )
+
+class NewReasonViewTestsForNormalUsers(TestCase):
+
+    def setUp(self):
+        url = reverse('new_reason')
+        self.response = self.client.get(url)
+
+    def test_new_reason_view_status_code_for_normal_user(self):
+        self.assertEqual(self.response.status_code, 302)
+
+class NewReasonViewTestsForSuperUsers(TestCase):
+
+    def setUp(self):
+        get_user_model().objects.create_superuser(
+            username='delesuper',
+            email='dele@super.com',
+            password='password'
+        )
+        self.client.login(username='delesuper', password='password')
+        url = reverse('new_reason')
+        self.post_response = self.client.post(url,
+                                {'purpose': 'I want to hire you'}, follow=True)
+
+
+    def test_new_reason_view_status_code(self):
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_new_reasons_page_template(self):
+        self.assertTemplateUsed(self.post_response, 'reason.html')
+
+    def test_new_reasons_page_contains_correct_html(self):
+        self.assertContains(self.post_response, 'I want to hire you')
+        self.assertContains(self.post_response, 'Edit')
+        self.assertContains(self.post_response, 'Delete')
+
+
+# Reminder to follow the DRY principle and stop writing the exact same login code in every testclass
