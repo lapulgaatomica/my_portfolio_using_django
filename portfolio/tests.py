@@ -17,6 +17,15 @@ from .views import (
         DeleteReasonView
     )
 
+def create_and_login_superuser(client):
+    get_user_model().objects.create_superuser(
+        username='delesuper',
+        email='dele@super.com',
+        password='password'
+    )
+    client.login(username='delesuper', password='password')
+
+
 class HomepageTests(TestCase):
 
     def setUp(self):
@@ -46,12 +55,7 @@ class HomepageTests(TestCase):
 class HomepageTestsForSuperUser(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         url = reverse('home')
         self.response = self.client.get(url)
 
@@ -71,12 +75,7 @@ class NewAboutViewTestsForNormalUsers(TestCase):
 class NewAboutViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         url = reverse('new_about')
         self.response = self.client.get(url)
         self.post_response = self.client.post(url, {'paragraph':'I am a new aboutme'}, follow=True)
@@ -123,12 +122,7 @@ class UpdateAboutViewTestsForNormalUsers(TestCase):
 class UpdateAboutViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         self.about = About.objects.create(
             paragraph='I am a backend developer'
         )
@@ -178,12 +172,7 @@ class DeleteAboutViewTestsForNormalUsers(TestCase):
 class DeleteAboutViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         self.about = About.objects.create(
             paragraph='I am a backend developer'
         )
@@ -230,12 +219,7 @@ class NewSkillViewTestsForNormalUsers(TestCase):
 class NewSkillViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        self.super_user = get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         url = reverse('new_skill')
         self.response = self.client.get(url)
         self.post_response = self.client.post(url, {'skill':'Devops'}, follow=True)
@@ -282,12 +266,7 @@ class UpdateSkillViewTestsForNormalUsers(TestCase):
 class UpdateSkillViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         self.competency = Competency.objects.create(
             skill='Development and Source Control (Docker, Git, Github)'
         )
@@ -338,12 +317,7 @@ class DeleteSkillViewTestsForNormalUsers(TestCase):
 class DeleteSkillViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         self.competency = Competency.objects.create(
             skill='Development and Source Control (Docker, Git, Github)'
         )
@@ -392,12 +366,7 @@ class ReasonsViewTestsForNormalUsers(TestCase):
 class ReasonsViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         url = reverse('reasons')
         self.response = self.client.get(url)
 
@@ -433,12 +402,7 @@ class NewReasonViewTestsForNormalUsers(TestCase):
 class NewReasonViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         url = reverse('new_reason')
         self.post_response = self.client.post(url,
                                 {'purpose': 'I want to hire you'}, follow=True)
@@ -470,12 +434,7 @@ class UpdateReasonViewTestsForNormalUsers(TestCase):
 class UpdateReasonViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         self.reason = Reason.objects.create(
             purpose='I want to hire you'
         )
@@ -527,12 +486,7 @@ class DeleteReasonViewTestsForNormalUsers(TestCase):
 class DeleteReasonViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
-        get_user_model().objects.create_superuser(
-            username='delesuper',
-            email='dele@super.com',
-            password='password'
-        )
-        self.client.login(username='delesuper', password='password')
+        create_and_login_superuser(self.client)
         self.reason = Reason.objects.create(
             purpose='I want to hire you'
         )
