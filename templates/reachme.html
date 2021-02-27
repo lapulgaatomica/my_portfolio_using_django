@@ -10,14 +10,14 @@
 
   </div>
   <div class="card-body">
-    <form class="form" role="form" method="post">
+    <form class="form" role="form" method="post" action="{% url 'send_message' %}">
       {% csrf_token %}
       <div class="form-row">
         <div class="form-group col-md-4">
-          <select name="purpose" required class="form-control">
+          <select name="reason" required class="form-control">
             <option value="" selected>Reason</option>
             {% for reason in reasons %}
-              <option value="{{ readon.id }}">{{ reason.purpose }}</option>
+              <option value="{{ reason.id }}">{{ reason.purpose }}</option>
             {% endfor %}
           </select>
         </div>

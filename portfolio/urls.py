@@ -10,7 +10,8 @@ from .views import (
     ReasonsView,
     NewReasonView,
     UpdateReasonView,
-    DeleteReasonView)
+    DeleteReasonView,
+    SendMessageView,)
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
@@ -24,4 +25,5 @@ urlpatterns = [
     path('reasons/new', NewReasonView.as_view(), name='new_reason'),
     path('reasons/<int:pk>/edit', UpdateReasonView.as_view(), name='edit_reason'),
     path('reasons/<int:pk>/delete', DeleteReasonView.as_view(), name='delete_reason'),
+    path('message/send', SendMessageView.as_view(), name='send_message'),
 ]

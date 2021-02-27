@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from .models import About, Competency, Reason
+from .models import About, Competency, Reason, Message
 
 class HomePageView(ListView):
     model = About
@@ -65,3 +65,7 @@ class DeleteReasonView(LoginRequiredMixin, DeleteView):
     model = Reason
     template_name = 'delete_reason.html'
     success_url = reverse_lazy('reasons')
+
+class SendMessageView(CreateView):
+    model = Message
+    fields = ['reason', 'name', 'email', 'message',]
