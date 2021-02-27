@@ -69,3 +69,8 @@ class DeleteReasonView(LoginRequiredMixin, DeleteView):
 class SendMessageView(CreateView):
     model = Message
     fields = ['reason', 'name', 'email', 'message',]
+
+    def form_valid(self, form):
+        from django.core.mail import send_mail
+        send_mail('E-mail', 'Email sent.', 'email@email.com', ['email@email.com'], fail_silently=False)
+        return super(SendMessageView,self).form_valid(form)
