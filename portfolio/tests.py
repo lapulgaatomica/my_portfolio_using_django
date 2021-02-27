@@ -519,5 +519,3 @@ class DeleteReasonViewTestsForSuperUsers(TestCase):
 
     def test_post_contains_correct_text(self):
         self.assertNotContains(self.post_response, 'I want to hire you')
-
-# Reminder to follow the DRY principle and stop writing the exact same login code in every testclass
