@@ -3,19 +3,8 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 
 from .models import About, Competency, Reason
-from .views import (
-        HomePageView,
-        NewAboutView,
-        NewSkillView,
-        UpdateAboutView,
-        UpdateSkillView,
-        DeleteAboutView,
-        DeleteSkillView,
-        ReasonsView,
-        NewReasonView,
-        UpdateReasonView,
-        DeleteReasonView
-    )
+from . import views
+
 
 def create_and_login_superuser(client):
     get_user_model().objects.create_superuser(
@@ -49,8 +38,9 @@ class HomepageTests(TestCase):
         view = resolve('/')
         self.assertEqual(
             view.func.__name__,
-            HomePageView.as_view().__name__
+            views.HomePageView.as_view().__name__
         )
+
 
 class HomepageTestsForSuperUser(TestCase):
 
@@ -63,6 +53,7 @@ class HomepageTestsForSuperUser(TestCase):
         self.assertContains(self.response, 'Add New "About Me"')
         self.assertContains(self.response, 'Add New Skill')
 
+
 class NewAboutViewTestsForNormalUsers(TestCase):
 
     def setUp(self):
@@ -71,6 +62,7 @@ class NewAboutViewTestsForNormalUsers(TestCase):
 
     def test_about_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
+
 
 class NewAboutViewTestsForSuperUsers(TestCase):
 
@@ -95,7 +87,7 @@ class NewAboutViewTestsForSuperUsers(TestCase):
         view = resolve('/aboutme/new')
         self.assertEqual(
             view.func.__name__,
-            NewAboutView.as_view().__name__
+            views.NewAboutView.as_view().__name__
         )
 
     def test_post_status_code(self):
@@ -106,6 +98,7 @@ class NewAboutViewTestsForSuperUsers(TestCase):
 
     def test_post_contains_correct_text(self):
         self.assertContains(self.post_response, 'I am a new aboutme')
+
 
 class UpdateAboutViewTestsForNormalUsers(TestCase):
 
@@ -118,6 +111,7 @@ class UpdateAboutViewTestsForNormalUsers(TestCase):
 
     def test_update_about_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
+
 
 class UpdateAboutViewTestsForSuperUsers(TestCase):
 
@@ -145,7 +139,7 @@ class UpdateAboutViewTestsForSuperUsers(TestCase):
         view = resolve(f'/aboutme/{self.about.id}/edit')
         self.assertEqual(
             view.func.__name__,
-            UpdateAboutView.as_view().__name__
+            views.UpdateAboutView.as_view().__name__
         )
 
     def test_post_status_code(self):
@@ -156,6 +150,7 @@ class UpdateAboutViewTestsForSuperUsers(TestCase):
 
     def test_post_contains_correct_text(self):
         self.assertContains(self.post_response, 'Edited I am a backend developer')
+
 
 class DeleteAboutViewTestsForNormalUsers(TestCase):
 
@@ -168,6 +163,7 @@ class DeleteAboutViewTestsForNormalUsers(TestCase):
 
     def test_delete_about_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
+
 
 class DeleteAboutViewTestsForSuperUsers(TestCase):
 
@@ -195,7 +191,7 @@ class DeleteAboutViewTestsForSuperUsers(TestCase):
         view = resolve(f'/aboutme/{self.about.id}/delete')
         self.assertEqual(
             view.func.__name__,
-            DeleteAboutView.as_view().__name__
+            views.DeleteAboutView.as_view().__name__
         )
 
     def test_post_status_code(self):
@@ -207,6 +203,7 @@ class DeleteAboutViewTestsForSuperUsers(TestCase):
     def test_post_contains_correct_text(self):
         self.assertNotContains(self.post_response, 'I am a backend developer')
 
+
 class NewSkillViewTestsForNormalUsers(TestCase):
 
     def setUp(self):
@@ -215,6 +212,7 @@ class NewSkillViewTestsForNormalUsers(TestCase):
 
     def test_skill_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
+
 
 class NewSkillViewTestsForSuperUsers(TestCase):
 
@@ -239,7 +237,7 @@ class NewSkillViewTestsForSuperUsers(TestCase):
         view = resolve('/skill/new')
         self.assertEqual(
             view.func.__name__,
-            NewSkillView.as_view().__name__
+            views.NewSkillView.as_view().__name__
         )
 
     def test_status_code(self):
@@ -251,8 +249,8 @@ class NewSkillViewTestsForSuperUsers(TestCase):
     def test_contains_correct_text(self):
         self.assertContains(self.post_response, 'Devops')
 
-class UpdateSkillViewTestsForNormalUsers(TestCase):
 
+class UpdateSkillViewTestsForNormalUsers(TestCase):
     def setUp(self):
         self.competency = Competency.objects.create(
             skill='Development and Source Control (Docker, Git, Github)'
@@ -263,8 +261,8 @@ class UpdateSkillViewTestsForNormalUsers(TestCase):
     def test_update_skill_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
 
-class UpdateSkillViewTestsForSuperUsers(TestCase):
 
+class UpdateSkillViewTestsForSuperUsers(TestCase):
     def setUp(self):
         create_and_login_superuser(self.client)
         self.competency = Competency.objects.create(
@@ -290,7 +288,7 @@ class UpdateSkillViewTestsForSuperUsers(TestCase):
         view = resolve(f'/skill/{self.competency.id}/edit')
         self.assertEqual(
             view.func.__name__,
-            UpdateSkillView.as_view().__name__
+            views.UpdateSkillView.as_view().__name__
         )
 
     def test_status_code(self):
@@ -302,8 +300,8 @@ class UpdateSkillViewTestsForSuperUsers(TestCase):
     def test_contains_correct_text(self):
         self.assertContains(self.post_response, 'Development and Source Control (Docker, Git, Github, Kubernetes)')
 
-class DeleteSkillViewTestsForNormalUsers(TestCase):
 
+class DeleteSkillViewTestsForNormalUsers(TestCase):
     def setUp(self):
         self.competency = Competency.objects.create(
             skill='Development and Source Control (Docker, Git, Github)'
@@ -314,8 +312,8 @@ class DeleteSkillViewTestsForNormalUsers(TestCase):
     def test_delete_skill_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
 
-class DeleteSkillViewTestsForSuperUsers(TestCase):
 
+class DeleteSkillViewTestsForSuperUsers(TestCase):
     def setUp(self):
         create_and_login_superuser(self.client)
         self.competency = Competency.objects.create(
@@ -340,7 +338,7 @@ class DeleteSkillViewTestsForSuperUsers(TestCase):
         view = resolve(f'/skill/{self.competency.id}/delete')
         self.assertEqual(
             view.func.__name__,
-            DeleteSkillView.as_view().__name__
+            views.DeleteSkillView.as_view().__name__
         )
 
     def test_post_status_code(self):
@@ -354,7 +352,6 @@ class DeleteSkillViewTestsForSuperUsers(TestCase):
 
 
 class ReasonsViewTestsForNormalUsers(TestCase):
-
     def setUp(self):
         url = reverse('reasons')
         self.response = self.client.get(url)
@@ -364,7 +361,6 @@ class ReasonsViewTestsForNormalUsers(TestCase):
 
 
 class ReasonsViewTestsForSuperUsers(TestCase):
-
     def setUp(self):
         create_and_login_superuser(self.client)
         url = reverse('reasons')
@@ -387,17 +383,18 @@ class ReasonsViewTestsForSuperUsers(TestCase):
         view = resolve('/reasons')
         self.assertEqual(
             view.func.__name__,
-            ReasonsView.as_view().__name__
+            views.ReasonsView.as_view().__name__
         )
 
-class NewReasonViewTestsForNormalUsers(TestCase):
 
+class NewReasonViewTestsForNormalUsers(TestCase):
     def setUp(self):
         url = reverse('new_reason')
         self.response = self.client.get(url)
 
     def test_new_reason_view_status_code_for_normal_user(self):
         self.assertEqual(self.response.status_code, 302)
+
 
 class NewReasonViewTestsForSuperUsers(TestCase):
 
@@ -406,7 +403,6 @@ class NewReasonViewTestsForSuperUsers(TestCase):
         url = reverse('new_reason')
         self.post_response = self.client.post(url,
                                 {'purpose': 'I want to hire you'}, follow=True)
-
 
     def test_new_reason_view_status_code(self):
         self.assertEqual(self.post_response.status_code, 200)
@@ -419,8 +415,8 @@ class NewReasonViewTestsForSuperUsers(TestCase):
         self.assertContains(self.post_response, 'Edit')
         self.assertContains(self.post_response, 'Delete')
 
-class UpdateReasonViewTestsForNormalUsers(TestCase):
 
+class UpdateReasonViewTestsForNormalUsers(TestCase):
     def setUp(self):
         self.reason = Reason.objects.create(
             purpose='I want to hire you'
@@ -431,8 +427,8 @@ class UpdateReasonViewTestsForNormalUsers(TestCase):
     def test_update_reason_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
 
-class UpdateReasonViewTestsForSuperUsers(TestCase):
 
+class UpdateReasonViewTestsForSuperUsers(TestCase):
     def setUp(self):
         create_and_login_superuser(self.client)
         self.reason = Reason.objects.create(
@@ -449,14 +445,13 @@ class UpdateReasonViewTestsForSuperUsers(TestCase):
         self.assertTemplateUsed(self.response, 'update_reason.html')
 
     def test_update_reason_contains_correct_html(self):
-        self.assertContains(self.response,
-         'Edit "I want to hire you"')
+        self.assertContains(self.response, 'Edit "I want to hire you"')
 
     def test_update_reason_url_resolves_update_skill_view(self):
         view = resolve(f'/reasons/{self.reason.id}/edit')
         self.assertEqual(
             view.func.__name__,
-            UpdateReasonView.as_view().__name__
+            views.UpdateReasonView.as_view().__name__
         )
 
     def test_status_code(self):
@@ -471,8 +466,8 @@ class UpdateReasonViewTestsForSuperUsers(TestCase):
     def test_does_not_contain_incorrect_text(self):
         self.assertNotContains(self.post_response, 'I want to hire you')
 
-class DeleteReasonViewTestsForNormalUsers(TestCase):
 
+class DeleteReasonViewTestsForNormalUsers(TestCase):
     def setUp(self):
         self.reason = Reason.objects.create(
             purpose='I want to hire you'
@@ -483,8 +478,8 @@ class DeleteReasonViewTestsForNormalUsers(TestCase):
     def test_delete_reason_view_status_code_for_non_super_user(self):
         self.assertEqual(self.response.status_code, 302)
 
-class DeleteReasonViewTestsForSuperUsers(TestCase):
 
+class DeleteReasonViewTestsForSuperUsers(TestCase):
     def setUp(self):
         create_and_login_superuser(self.client)
         self.reason = Reason.objects.create(
@@ -508,7 +503,7 @@ class DeleteReasonViewTestsForSuperUsers(TestCase):
         view = resolve(f'/reasons/{self.reason.id}/delete')
         self.assertEqual(
             view.func.__name__,
-            DeleteReasonView.as_view().__name__
+            views.DeleteReasonView.as_view().__name__
         )
 
     def test_post_status_code(self):
@@ -519,3 +514,7 @@ class DeleteReasonViewTestsForSuperUsers(TestCase):
 
     def test_post_contains_correct_text(self):
         self.assertNotContains(self.post_response, 'I want to hire you')
+
+
+class SendMessageViewTests(TestCase):
+    pass
