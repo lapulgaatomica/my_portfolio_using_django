@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse, resolve
 
-from .models import About, Competency, Reason
+from .models import About, Competency, Reason, Message
 from . import views
 
 
@@ -517,4 +517,22 @@ class DeleteReasonViewTestsForSuperUsers(TestCase):
 
 
 class SendMessageViewTests(TestCase):
-    pass
+    def setUp(self):
+        Reason.objects.create(purpose='I want to hire you')
+        url = reverse('send_message')
+        self.response = self.client.post(url,
+                                         {'reason': '1',
+                                          'name': 'Jane Doe',
+                                          'email': 'jane@doe.com',
+                                          'message': 'Hey Dele'},
+                                         follow=True)
+        self.message_query = Message.objects.get(id=1)
+
+    def test_send_message_view_status_code(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_message_in_database(self):
+        self.assertTrue(self.message_query.name, 'Jane Doe')
+        self.assertTrue(self.message_query.reason, 'I want to hire you')
+        self.assertTrue(self.message_query.email, 'jane@doe.com')
+        self.assertTrue(self.message_query.message, 'Hey Dele')
