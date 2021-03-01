@@ -531,8 +531,23 @@ class SendMessageViewTests(TestCase):
     def test_send_message_view_status_code(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_redirect_template_used(self):
+        self.assertTemplateUsed(self.response, 'message_sent.html')
+
+    def test_sent_message_template_contains_correct_html(self):
+        self.assertContains(self.response, 'Hello Jane Doe')
+        self.assertContains(self.response, 'Message Sent')
+
+    def test_sent_message_url_resolves_view(self):
+        view = resolve(f'/message/{self.message_query.id}/sent')
+        self.assertEqual(
+            view.func.__name__,
+            views.SentMessageView.as_view().__name__
+        )
+
     def test_message_in_database(self):
         self.assertTrue(self.message_query.name, 'Jane Doe')
         self.assertTrue(self.message_query.reason, 'I want to hire you')
         self.assertTrue(self.message_query.email, 'jane@doe.com')
         self.assertTrue(self.message_query.message, 'Hey Dele')
+
