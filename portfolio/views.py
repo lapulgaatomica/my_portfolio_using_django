@@ -1,8 +1,8 @@
-from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView
+from django.core.mail import send_mail
+from django.urls import reverse_lazy, reverse
+from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-
 from .models import About, Competency, Reason, Message
 
 
@@ -81,6 +81,11 @@ class SendMessageView(CreateView):
     model = Message
     fields = ['reason', 'name', 'email', 'message']
 
+    def get_success_url(self):
+        # print(self.object.id)
+        return reverse('sent_message', kwargs={'pk': self.object.pk})
+        # return reverse('reasons')
+
     def form_valid(self, form):
         subject = 'Message from Portfolio App'
         name_of_sender = form["name"].value()
@@ -89,7 +94,11 @@ class SendMessageView(CreateView):
         sender_email = form["email"].value()
         message = f'{name_of_sender} says {reason}\n\nTheir exact statement was "{exact_message}"\n' \
                   f'Here is their email if you need to reach them: {sender_email}'
-
-        from django.core.mail import send_mail
         send_mail(subject, message, 'odedoyin25@gmail.com', ['akindeleodedoyin@gmail.com'], fail_silently=False)
         return super(SendMessageView, self).form_valid(form)
+
+
+class SentMessageView(DetailView):
+    model = Message
+    context_object_name = 'message'
+    template_name = 'message_sent.html'
