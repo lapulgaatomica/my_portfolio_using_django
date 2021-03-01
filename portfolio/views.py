@@ -102,3 +102,9 @@ class SentMessageView(DetailView):
     model = Message
     context_object_name = 'message'
     template_name = 'message_sent.html'
+
+
+class MessagesReceivedView(LoginRequiredMixin, ListView):
+    model = Message
+    context_object_name = 'messages'
+    template_name = 'messages_received.html'
