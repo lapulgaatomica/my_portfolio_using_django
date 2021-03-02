@@ -8,6 +8,11 @@
       <li class="nav-item active">
         <a class="nav-link font-weight-bold" href="{% url 'home' %}">Home Page<span class="sr-only">(current)</span></a>
       </li>
+      {% if user.is_superuser %}
+      <li class="nav-item active">
+        <a class="nav-link font-weight-bold" href="{% url 'received_messages' %}">Received Messages<span class="sr-only">(current)</span></a>
+      </li>
+      {% endif %}
     </ul>
   </div>
 </nav>

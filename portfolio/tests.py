@@ -379,7 +379,7 @@ class ReasonsViewTestsForSuperUsers(TestCase):
         self.assertNotContains(self.response, 'Add New "About Me"')
         self.assertNotContains(self.response, 'Add New Skill')
 
-    def test_reasons_page_url_resolves_homepageview(self):
+    def test_reasons_page_url_resolves_pageview(self):
         view = resolve('/reasons')
         self.assertEqual(
             view.func.__name__,
@@ -551,3 +551,38 @@ class SendMessageViewTests(TestCase):
         self.assertTrue(self.message_query.email, 'jane@doe.com')
         self.assertTrue(self.message_query.message, 'Hey Dele')
 
+
+class MessagesReceivedViewTestsForNormalUsers(TestCase):
+    def setUp(self):
+        reason = Reason.objects.create(purpose='I want to hire you')
+        Message.objects.create(reason=reason, name='Jane Doe', email='jane@doe.com', message='Hey Dele')
+        url = reverse('received_messages')
+        self.response = self.client.get(url)
+
+    def test_messages_received_view_status_code_for_non_super_user(self):
+        self.assertEqual(self.response.status_code, 302)
+
+
+class MessagesReceivedViewTestsForSuperUsers(TestCase):
+    def setUp(self):
+        create_and_login_superuser(self.client)
+        reason = Reason.objects.create(purpose='I want to hire you')
+        Message.objects.create(reason=reason, name='Jane Doe', email='jane@doe.com', message='Hey Dele')
+        url = reverse('received_messages')
+        self.response = self.client.get(url)
+
+    def test_messages_received_view_status_code_for_super_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_messages_received_page_template_for_super_users(self):
+        self.assertTemplateUsed(self.response, 'messages_received.html')
+
+    def test_messages_received_page_contains_correct_html(self):
+        self.assertContains(self.response, 'Jane Doe says "I want to hire you"')
+
+    def test_messages_received_page_url_resolves_pageview(self):
+        view = resolve('/message/received')
+        self.assertEqual(
+            view.func.__name__,
+            views.MessagesReceivedView.as_view().__name__
+        )
