@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView
@@ -77,14 +78,10 @@ class DeleteReasonView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('reasons')
 
 
-class SendMessageView(CreateView):
+class SendMessageView(SuccessMessageMixin, CreateView):
     model = Message
     fields = ['reason', 'name', 'email', 'message']
-
-    def get_success_url(self):
-        # print(self.object.id)
-        return reverse('sent_message', kwargs={'pk': self.object.pk})
-        # return reverse('reasons')
+    success_message = "Your message was sent successfully, expect a feedback ASAP!!!"
 
     def form_valid(self, form):
         subject = 'Message from Portfolio App'

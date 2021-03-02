@@ -532,11 +532,10 @@ class SendMessageViewTests(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     def test_redirect_template_used(self):
-        self.assertTemplateUsed(self.response, 'message_sent.html')
+        self.assertTemplateUsed(self.response, 'home.html')
 
     def test_sent_message_template_contains_correct_html(self):
-        self.assertContains(self.response, 'Hello Jane Doe')
-        self.assertContains(self.response, 'Message Sent')
+        self.assertContains(self.response, 'Your message was sent successfully, expect a feedback ASAP!!!')
 
     def test_sent_message_url_resolves_view(self):
         view = resolve(f'/message/{self.message_query.id}/sent')
