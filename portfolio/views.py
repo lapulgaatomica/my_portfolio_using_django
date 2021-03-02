@@ -108,3 +108,5 @@ class MessagesReceivedView(LoginRequiredMixin, ListView):
     model = Message
     context_object_name = 'messages'
     template_name = 'messages_received.html'
+    paginate_by = 6
+    queryset = Message.objects.order_by('-id')

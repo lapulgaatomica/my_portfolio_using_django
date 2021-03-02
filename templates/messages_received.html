@@ -17,7 +17,7 @@
           <br>
           {{message.message}}
           <br>
-          You can reach them through this <a href="mailto:{{message.email}}?subject=Reply from Odedoyin Akindele&body = Message...">email</a></p>
+          You can reach them through this <a href="mailto:{{message.email}}">{{message.email}}</a></p>
       </div>
       <div class="card-footer">
       <small class="text-muted">Message was sent on {{message.date}}</small>
@@ -27,4 +27,5 @@
   {% endfor %}
 </div>
 </div>
+{% include "pagination.html" with page=page_obj %}
 {% endblock content%}
