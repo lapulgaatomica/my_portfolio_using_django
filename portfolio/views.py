@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import About, Competency, Reason, Message
+from .models import About, Competency, Reason, Message, PastWork
 
 
 class HomePageView(ListView):
@@ -16,6 +16,7 @@ class HomePageView(ListView):
         context = super().get_context_data(**kwargs)
         context['competencies'] = Competency.objects.all()
         context['reasons'] = Reason.objects.all()
+        context['pastworks'] = PastWork.objects.order_by('-date_modified')[:2]
         return context
 
 
@@ -107,3 +108,17 @@ class MessagesReceivedView(LoginRequiredMixin, ListView):
     template_name = 'messages_received.html'
     paginate_by = 6
     queryset = Message.objects.order_by('-id')
+
+
+class PastWorksView(ListView):
+    model = PastWork
+    context_object_name = 'pastworks'
+    template_name = 'pastworks.html'
+    paginate_by = 2
+    queryset = PastWork.objects.order_by('-date_modified')
+
+
+class NewPastWorkView(LoginRequiredMixin, CreateView):
+    model = PastWork
+    fields = ['name', 'description', 'github_link', 'page_link']
+    template_name = 'new_pastwork.html'

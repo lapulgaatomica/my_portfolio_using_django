@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="card-header">
+      <h5 class="text-center">
+        Past Works
+        {% if user.is_superuser %}
+          <a href="{% url 'new_pastwork' %}" class="btn btn-primary">
+            Add Past Work
+          </a>
+        {% endif %}
+      </h5>
+  </div>
+  <div class="row">
+    {% for pastwork in pastworks %}
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{pastwork.name}}</h5>
+        <p class="card-text text-center">{{pastwork.description}}</p>
+        <div class="text-center">
+          <a href="" class="btn btn-sm btn-primary">Check Details</a>
+          <a href="{{pastwork.github_link}}" class="btn btn-sm btn-primary">Github Link</a>
+            {% if pastwork.page_link %}
+          <a href="{{pastwork.page_link}}" class="btn btn-sm btn-primary">Visit the Page</a>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+    {% endfor %}
+</div>
+  <div class="card-footer text-center">
+    <a class="btn btn-link btn-lg" href="{% url 'pastworks' %}?page=2">See More Side Projects That I've Done Here...</a>
+  </div>
+</div>
