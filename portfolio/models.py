@@ -44,3 +44,18 @@ class Message(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
+
+
+class PastWork(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    description = models.CharField(max_length=75)
+    github_link = models.URLField(max_length=100, unique=True)
+    page_link = models.URLField(max_length=100, blank=True, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'message from {self.name}'
+
+    def get_absolute_url(self):
+        return reverse('home')
