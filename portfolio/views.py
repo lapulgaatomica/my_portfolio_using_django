@@ -125,3 +125,15 @@ class NewPastWorkView(LoginRequiredMixin, CreateView):
     model = PastWork
     fields = ['name', 'description', 'github_link', 'page_link']
     template_name = 'new_pastwork.html'
+
+
+class UpdatePastWorkView(LoginRequiredMixin, UpdateView):
+    model = PastWork
+    fields = ['name', 'description', 'github_link', 'page_link']
+    template_name = 'update_pastwork.html'
+
+
+class DeletePastWorkView(LoginRequiredMixin, DeleteView):
+    model = PastWork
+    template_name = 'delete_pastwork.html'
+    success_url = reverse_lazy('home')

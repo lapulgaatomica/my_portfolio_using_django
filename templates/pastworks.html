@@ -8,7 +8,17 @@
     {% for pastwork in pastworks %}
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">{{pastwork.name}}</h5>
+        <h5 class="card-title text-center">
+          {{pastwork.name}}
+          {% if user.is_superuser %}
+          <a href="{% url 'update_pastwork' pastwork.id %}" class="btn btn-sm btn-primary">
+            Edit
+          </a>
+          <a href="{% url 'delete_pastwork' pastwork.id %}" class="btn btn-sm btn-danger">
+            Delete
+          </a>
+          {% endif %}
+        </h5>
         <p class="card-text text-center">{{pastwork.description}}</p>
         <div class="text-center">
           <a href="{% url 'pastwork' pastwork.id %}" class="btn btn-sm btn-primary">Check Details</a>

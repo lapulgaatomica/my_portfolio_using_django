@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block title %}Odedoyin Akindele - New "Past work"{% endblock %}
+{% block title %}Odedoyin Akindele - Edit {{pastwork.name}}{% endblock %}
 {% block content %}
-  <h1>Add Past Work</h1>
+  <h1>Edit {{pastwork.name}}</h1>
   <form class="form" role="form" action="" method="post">
     {% csrf_token %}
     {{ form|crispy }}
-    <input type="submit" class="btn btn-primary" value="Add Past Work">
+    <input type="submit" class="btn btn-primary" value="Edit">
   </form>
 {% endblock content%}

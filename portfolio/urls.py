@@ -18,6 +18,6 @@ urlpatterns = [
     path('pastworks', views.PastWorksView.as_view(), name='pastworks'),
     path('pastwork/new', views.NewPastWorkView.as_view(), name='new_pastwork'),
     path('pastwork/<int:pk>', views.PastWorkView.as_view(), name='pastwork'),
-    # path('pastwork/<int:pk>/edit', views.UpdatePastWorkView.as_view(), name='update_pastwork'),
-    # path('pastwork/<int:pk>/delete', views.DeletePastWorkView.as_view(), name='delete_pastwork'),
+    path('pastwork/<int:pk>/edit', views.UpdatePastWorkView.as_view(), name='update_pastwork'),
+    path('pastwork/<int:pk>/delete', views.DeletePastWorkView.as_view(), name='delete_pastwork'),
 ]

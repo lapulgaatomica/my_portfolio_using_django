@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}Odedoyin Akindele - Delete "About Me"{% endblock %}
+{% block title %}Odedoyin Akindele - Delete {{pastwork.name}}{% endblock %}
 {% block content %}
-<h1>Delete "About Me"</h1>
+<h1>Delete {{pastwork.name}}</h1>
 <form class="form" role="form" action="" method="post">
   {% csrf_token %}
-  <p>Are you sure you want to delete {{about.paragraph}}? </p>
+  <p>Are you sure you want to delete {{pastwork.name}}? </p>
   <input type="submit" class="btn btn-danger" value="Delete">
 </form>
 {% endblock content %}
