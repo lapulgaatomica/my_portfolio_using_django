@@ -14,11 +14,10 @@ urlpatterns = [
     path('reasons/<int:pk>/edit', views.UpdateReasonView.as_view(), name='edit_reason'),
     path('reasons/<int:pk>/delete', views.DeleteReasonView.as_view(), name='delete_reason'),
     path('message/send', views.SendMessageView.as_view(), name='send_message'),
-    path('message/<int:pk>/sent', views.SentMessageView.as_view(), name='sent_message'),
     path('message/received', views.MessagesReceivedView.as_view(), name='received_messages'),
     path('pastworks', views.PastWorksView.as_view(), name='pastworks'),
     path('pastwork/new', views.NewPastWorkView.as_view(), name='new_pastwork'),
-    # path('pastwork/<int:pk>', views.PastWorkView.as_view(), name='pastwork'),
+    path('pastwork/<int:pk>', views.PastWorkView.as_view(), name='pastwork'),
     # path('pastwork/<int:pk>/edit', views.UpdatePastWorkView.as_view(), name='update_pastwork'),
     # path('pastwork/<int:pk>/delete', views.DeletePastWorkView.as_view(), name='delete_pastwork'),
 ]

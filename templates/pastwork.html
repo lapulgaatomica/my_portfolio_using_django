@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Odedoyin Akindele - {{pastwork.name}}{% endblock title %}
+{% block content %}
+<div class="card text-center">
+  <h5 class="card-header">{{pastwork.name}}</h5>
+  <div class="card-body">
+    <h5 class="card-title">{{pastwork.description}}</h5>
+    <p class="card-text">Will contain detailed information about the project</p>
+    <a href="{% url 'pastwork' pastwork.id %}" class="btn btn-sm btn-primary">Check Details</a>
+    <a href="{{pastwork.github_link}}" class="btn btn-sm btn-primary">Github Link</a>
+    {% if pastwork.page_link %}
+    <a href="{{pastwork.page_link}}" class="btn btn-sm btn-primary">Visit the Page</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

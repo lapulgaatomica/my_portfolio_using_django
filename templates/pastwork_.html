@@ -17,7 +17,7 @@
         <h5 class="card-title text-center">{{pastwork.name}}</h5>
         <p class="card-text text-center">{{pastwork.description}}</p>
         <div class="text-center">
-          <a href="" class="btn btn-sm btn-primary">Check Details</a>
+          <a href="{% url 'pastwork' pastwork.id %}" class="btn btn-sm btn-primary">Check Details</a>
           <a href="{{pastwork.github_link}}" class="btn btn-sm btn-primary">Github Link</a>
             {% if pastwork.page_link %}
           <a href="{{pastwork.page_link}}" class="btn btn-sm btn-primary">Visit the Page</a>

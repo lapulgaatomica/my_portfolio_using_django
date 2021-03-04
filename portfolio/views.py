@@ -99,12 +99,6 @@ class SendMessageView(SuccessMessageMixin, CreateView):
         return super(SendMessageView, self).form_valid(form)
 
 
-class SentMessageView(DetailView):
-    model = Message
-    context_object_name = 'message'
-    template_name = 'message_sent.html'
-
-
 class MessagesReceivedView(LoginRequiredMixin, ListView):
     model = Message
     context_object_name = 'messages'
@@ -119,6 +113,12 @@ class PastWorksView(ListView):
     template_name = 'pastworks.html'
     paginate_by = 2
     queryset = PastWork.objects.order_by('-date_modified')
+
+
+class PastWorkView(DetailView):
+    model = PastWork
+    context_object_name = 'pastwork'
+    template_name = 'pastwork.html'
 
 
 class NewPastWorkView(LoginRequiredMixin, CreateView):
