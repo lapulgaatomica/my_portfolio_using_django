@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
@@ -16,7 +17,9 @@ class HomePageView(ListView):
         context = super().get_context_data(**kwargs)
         context['competencies'] = Competency.objects.all()
         context['reasons'] = Reason.objects.all()
-        context['pastworks'] = PastWork.objects.order_by('-date_modified')[:2]
+        past_works = PastWork.objects.order_by('-date_modified').all()
+        past_works_paginator = Paginator(past_works, 2)
+        context['pastworks'] = past_works_paginator.get_page(1)
         return context
 
 

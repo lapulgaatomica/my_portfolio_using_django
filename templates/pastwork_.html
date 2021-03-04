@@ -28,7 +28,9 @@
   </div>
     {% endfor %}
 </div>
+  {% if pastworks.has_next %}
   <div class="card-footer text-center">
     <a class="btn btn-link btn-lg" href="{% url 'pastworks' %}?page=2">See More Side Projects That I've Done Here...</a>
   </div>
+  {% endif %}
 </div>
