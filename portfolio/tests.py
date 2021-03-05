@@ -69,10 +69,10 @@ class NewAboutViewTestsForNormalUsers(TestCase):
 
     def setUp(self):
         url = reverse('new_about')
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_about_view_status_code_for_non_super_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class NewAboutViewTestsForSuperUsers(TestCase):
@@ -118,10 +118,10 @@ class UpdateAboutViewTestsForNormalUsers(TestCase):
             paragraph='I am a backend developer'
         )
         url = reverse('edit_about', args=[str(self.about.id)])
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_update_about_view_status_code_for_non_super_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class UpdateAboutViewTestsForSuperUsers(TestCase):
@@ -170,10 +170,10 @@ class DeleteAboutViewTestsForNormalUsers(TestCase):
             paragraph='I am a backend developer'
         )
         url = reverse('delete_about', args=[str(self.about.id)])
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_delete_about_view_status_code_for_non_super_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class DeleteAboutViewTestsForSuperUsers(TestCase):
@@ -195,8 +195,7 @@ class DeleteAboutViewTestsForSuperUsers(TestCase):
 
     def test_delete_about_contains_correct_html(self):
         self.assertContains(self.response, 'Delete "About Me"')
-        self.assertContains(self.response,
-         'Are you sure you want to delete I am a backend developer?')
+        self.assertContains(self.response, 'Are you sure you want to delete I am a backend developer?')
 
     def test_delete_about_url_resolves_delete_about_view(self):
         view = resolve(f'/aboutme/{self.about.id}/delete')
@@ -219,10 +218,10 @@ class NewSkillViewTestsForNormalUsers(TestCase):
 
     def setUp(self):
         url = reverse('new_skill')
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_skill_view_status_code_for_non_super_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class NewSkillViewTestsForSuperUsers(TestCase):
@@ -267,10 +266,10 @@ class UpdateSkillViewTestsForNormalUsers(TestCase):
             skill='Development and Source Control (Docker, Git, Github)'
         )
         url = reverse('edit_skill', args=[str(self.competency.id)])
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_update_skill_view_status_code_for_non_super_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class UpdateSkillViewTestsForSuperUsers(TestCase):
@@ -318,10 +317,10 @@ class DeleteSkillViewTestsForNormalUsers(TestCase):
             skill='Development and Source Control (Docker, Git, Github)'
         )
         url = reverse('delete_skill', args=[str(self.competency.id)])
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_delete_skill_view_status_code_for_non_super_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class DeleteSkillViewTestsForSuperUsers(TestCase):
@@ -365,10 +364,10 @@ class DeleteSkillViewTestsForSuperUsers(TestCase):
 class ReasonsViewTestsForNormalUsers(TestCase):
     def setUp(self):
         url = reverse('reasons')
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_reason_view_status_code_for_normal_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class ReasonsViewTestsForSuperUsers(TestCase):
@@ -401,10 +400,10 @@ class ReasonsViewTestsForSuperUsers(TestCase):
 class NewReasonViewTestsForNormalUsers(TestCase):
     def setUp(self):
         url = reverse('new_reason')
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_new_reason_view_status_code_for_normal_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class NewReasonViewTestsForSuperUsers(TestCase):
@@ -433,10 +432,10 @@ class UpdateReasonViewTestsForNormalUsers(TestCase):
             purpose='I want to hire you'
         )
         url = reverse('edit_reason', args=[str(self.reason.id)])
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_update_reason_view_status_code_for_non_super_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class UpdateReasonViewTestsForSuperUsers(TestCase):
@@ -484,10 +483,10 @@ class DeleteReasonViewTestsForNormalUsers(TestCase):
             purpose='I want to hire you'
         )
         url = reverse('delete_reason', args=[str(self.reason.id)])
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_delete_reason_view_status_code_for_non_super_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class DeleteReasonViewTestsForSuperUsers(TestCase):
@@ -560,10 +559,10 @@ class MessagesReceivedViewTestsForNormalUsers(TestCase):
         reason = Reason.objects.create(purpose='I want to hire you')
         Message.objects.create(reason=reason, name='Jane Doe', email='jane@doe.com', message='Hey Dele')
         url = reverse('received_messages')
-        self.response = self.client.get(url)
+        self.response = self.client.get(url, follow=True)
 
     def test_messages_received_view_status_code_for_non_super_user(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 404)
 
 
 class MessagesReceivedViewTestsForSuperUsers(TestCase):
@@ -653,4 +652,130 @@ class PastWorkViewTests(TestCase):
         self.assertEqual(
             view.func.__name__,
             views.PastWorkView.as_view().__name__
+        )
+
+
+class NewPastWorkViewForNormalUsers(TestCase):
+    def setUp(self):
+        url = reverse('new_pastwork')
+        self.response = self.client.get(url, follow=True)
+
+    def test_new_pastwork_view_status_code_for_normal_user(self):
+        self.assertEqual(self.response.status_code, 404)
+
+
+class NewPastWorkViewForSuperUsers(TestCase):
+    def setUp(self):
+        create_and_login_superuser(self.client)
+        url = reverse('new_pastwork')
+        self.response = self.client.get(url, follow=True)
+        self.post_response = self.client.post(url, {'name': 'Portfolio app', 'description': 'A portfolio app',
+                                                    'github_link': 'https://github.com', 'page_link': 'https://app.com'}
+                                              , follow=True)
+
+    def test_new_pastwork_view_status_code_for_normal_user(self):
+        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_new_pastwork_template_used(self):
+        self.assertTemplateUsed(self.response, 'new_pastwork.html')
+        self.assertTemplateUsed(self.post_response, 'home.html')
+
+    def test_new_pastwork_contains_correct_html(self):
+        self.assertContains(self.response, 'Add Past Work')
+        self.assertContains(self.post_response, 'Portfolio app')
+        self.assertContains(self.post_response, 'A portfolio app')
+
+    def test_new_pastwork_does_not_contain_incorrect_html(self):
+        self.assertNotContains(self.response, 'A portfolio app')
+
+    def test_new_pastwork_url_resolves_new_pastwork_view(self):
+        view = resolve('/pastwork/new')
+        self.assertEqual(
+            view.func.__name__,
+            views.NewPastWorkView.as_view().__name__
+        )
+
+
+class UpdatePastWorkViewTestsForNormalUsers(TestCase):
+    def setUp(self):
+        self.past_work = create_pastwork()
+        url = reverse('update_pastwork', args=[str(self.past_work.id)])
+        self.response = self.client.get(url, follow=True)
+
+    def test_update_pastwork_view_status_code_for_normal_user(self):
+        self.assertEqual(self.response.status_code, 404)
+
+
+class UpdatePastWorkViewTestsForSuperUsers(TestCase):
+    def setUp(self):
+        create_and_login_superuser(self.client)
+        self.past_work = create_pastwork()
+        url = reverse('update_pastwork', args=[str(self.past_work.id)])
+        self.response = self.client.get(url, follow=True)
+        self.post_response = self.client.post(url, {'name': 'Portfolio app edited',
+                                                    'description': 'An edited portfolio app',
+                                                    'github_link': 'https://github.com',
+                                                    'page_link': 'https://app.com'}, follow=True)
+
+    def test_update_pastwork_view_status_code_for_normal_user(self):
+        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_update_pastwork_template_used(self):
+        self.assertTemplateUsed(self.response, 'update_pastwork.html')
+        self.assertTemplateUsed(self.post_response, 'home.html')
+
+    def test_update_pastwork_contains_correct_html(self):
+        self.assertContains(self.response, f'Edit {self.past_work.name}')
+        self.assertContains(self.post_response, 'Portfolio app edited')
+
+    def test_update_pastwork_does_not_contain_incorrect_html(self):
+        self.assertNotContains(self.response, 'Portfolio app edited')
+
+    def test_update_pastwork_url_resolves_new_pastwork_view(self):
+        view = resolve(f'/pastwork/{self.past_work.id}/edit')
+        self.assertEqual(
+            view.func.__name__,
+            views.UpdatePastWorkView.as_view().__name__
+        )
+
+
+class DeletePastWorkViewTestsForNormalUsers(TestCase):
+    def setUp(self):
+        self.past_work = create_pastwork()
+        url = reverse('delete_pastwork', args=[str(self.past_work.id)])
+        self.response = self.client.get(url, follow=True)
+
+    def test_delete_pastwork_view_status_code_for_normal_user(self):
+        self.assertEqual(self.response.status_code, 404)
+
+
+class DeletePastWorkViewTestsForSuperUsers(TestCase):
+    def setUp(self):
+        create_and_login_superuser(self.client)
+        self.past_work = create_pastwork()
+        url = reverse('delete_pastwork', args=[str(self.past_work.id)])
+        self.response = self.client.get(url)
+        self.post_response = self.client.post(url, follow=True)
+
+    def test_delete_pastwork_view_status_code_for_normal_user(self):
+        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(self.post_response.status_code, 200)
+
+    def test_delete_pastwork_template_used(self):
+        self.assertTemplateUsed(self.response, 'delete_pastwork.html')
+        self.assertTemplateUsed(self.post_response, 'home.html')
+
+    def test_delete_pastwork_contains_correct_html(self):
+        self.assertContains(self.response, f'Delete {self.past_work.name}')
+
+    def test_delete_pastwork_does_not_contain_incorrect_html(self):
+        self.assertNotContains(self.post_response, f'{self.past_work.name}')
+
+    def test_delete_pastwork_url_resolves_new_pastwork_view(self):
+        view = resolve(f'/pastwork/{self.past_work.id}/delete')
+        self.assertEqual(
+            view.func.__name__,
+            views.DeletePastWorkView.as_view().__name__
         )
