@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse, resolve
 
-from .models import About, Competency, Reason, Message
+from .models import About, Competency, Reason, Message, PastWork
 from . import views
 
 
@@ -18,6 +18,8 @@ def create_and_login_superuser(client):
 class HomepageTests(TestCase):
 
     def setUp(self):
+        PastWork.objects.create(name='Portfolio', description='My portfolio app', github_link='https://github.com',
+                                page_link='https://app.com')
         url = reverse('home')
         self.response = self.client.get(url)
 
@@ -29,10 +31,15 @@ class HomepageTests(TestCase):
 
     def test_homepage_contains_correct_html(self):
         self.assertContains(self.response, 'Odedoyin Akindele')
+        self.assertContains(self.response, 'My portfolio app')
+        self.assertContains(self.response, 'Check Details')
+        self.assertContains(self.response, 'Github Link')
+        self.assertContains(self.response, 'Visit the Page')
 
     def test_homepage_does_not_contain_incorrect_html(self):
         self.assertNotContains(self.response, 'Add New "About Me"')
         self.assertNotContains(self.response, 'Add New Skill')
+        self.assertNotContains(self.response, 'See More Side Projects That I\'ve Done Here...')
 
     def test_homepage_url_resolves_homepageview(self):
         view = resolve('/')
