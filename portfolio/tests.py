@@ -15,11 +15,15 @@ def create_and_login_superuser(client):
     client.login(username='delesuper', password='password')
 
 
+def create_pastwork():
+    return PastWork.objects.create(name='Portfolio', description='My portfolio app',
+                                   github_link='https://github.com', page_link='https://app.com')
+
+
 class HomepageTests(TestCase):
 
     def setUp(self):
-        PastWork.objects.create(name='Portfolio', description='My portfolio app', github_link='https://github.com',
-                                page_link='https://app.com')
+        create_pastwork()
         url = reverse('home')
         self.response = self.client.get(url)
 
@@ -584,4 +588,69 @@ class MessagesReceivedViewTestsForSuperUsers(TestCase):
         self.assertEqual(
             view.func.__name__,
             views.MessagesReceivedView.as_view().__name__
+        )
+
+
+class PastWorksViewTests(TestCase):
+    def setUp(self):
+        create_pastwork()
+        url = reverse('pastworks')
+        self.response = self.client.get(url)
+
+    def test_pastworks_view_status_code(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_pastworks_page_template(self):
+        self.assertTemplateUsed(self.response, 'pastworks.html')
+
+    def test_pastworks_page_contains_correct_html(self):
+        self.assertContains(self.response, 'My portfolio app')
+        self.assertContains(self.response, 'Check Details')
+        self.assertContains(self.response, 'Github Link')
+        self.assertContains(self.response, 'Visit the Page')
+
+    def test_pastworks_page_does_not_contains_correct_html(self):
+        self.assertNotContains(self.response, 'Edit')
+        self.assertNotContains(self.response, 'Delete')
+
+    def test_pastworks_page_url_resolves_pageview(self):
+        view = resolve('/pastworks')
+        self.assertEqual(
+            view.func.__name__,
+            views.PastWorksView.as_view().__name__
+        )
+
+    def test_pastworks_view_for_super_users(self):
+        create_and_login_superuser(self.client)
+        url = reverse('pastworks')
+        response = self.client.get(url)
+        self.assertContains(response, 'Edit')
+        self.assertContains(response, 'Delete')
+
+
+class PastWorkViewTests(TestCase):
+    def setUp(self):
+        self.past_work = create_pastwork()
+        url = reverse('pastwork', args=[str(self.past_work.id)])
+        self.response = self.client.get(url)
+
+    def test_pastwork_view_status_code(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_pastwork_page_template(self):
+        self.assertTemplateUsed(self.response, 'pastwork.html')
+
+    def test_pastwork_page_contains_correct_html(self):
+        self.assertContains(self.response, 'My portfolio app')
+        self.assertContains(self.response, 'Github Link')
+        self.assertContains(self.response, 'Visit the Page')
+
+    def test_pastwork_page_does_not_contains_correct_html(self):
+        self.assertNotContains(self.response, 'Check Details')
+
+    def test_pastwork_page_url_resolves_pageview(self):
+        view = resolve(f'/pastwork/{self.past_work.id}')
+        self.assertEqual(
+            view.func.__name__,
+            views.PastWorkView.as_view().__name__
         )
