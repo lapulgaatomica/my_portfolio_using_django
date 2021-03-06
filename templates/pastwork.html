@@ -5,11 +5,18 @@
   <h5 class="card-header">{{pastwork.name}}</h5>
   <div class="card-body">
     <h5 class="card-title">{{pastwork.description}}</h5>
-    <p class="card-text">Will contain detailed information about the project</p>
+    {% if pastwork.motivation %}
+      <p class="card-text">{{pastwork.motivation}}t</p>
+    {% endif %}
     <a href="{{pastwork.github_link}}" class="btn btn-sm btn-primary">Github Link</a>
     {% if pastwork.page_link %}
     <a href="{{pastwork.page_link}}" class="btn btn-sm btn-primary">Visit the Page</a>
     {% endif %}
   </div>
+  {% if pastwork.tools_used %}
+  <div class="card-footer text-muted">
+    <p><strong>Tools Used: </strong>{{pastwork.tools_used}}</p>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

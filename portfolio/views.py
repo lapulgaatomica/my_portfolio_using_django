@@ -123,13 +123,13 @@ class PastWorkView(DetailView):
 
 class NewPastWorkView(LoginRequiredMixin, CreateView):
     model = PastWork
-    fields = ['name', 'description', 'github_link', 'page_link']
+    fields = ['name', 'motivation', 'tools_used', 'description', 'github_link', 'page_link']
     template_name = 'new_pastwork.html'
 
 
 class UpdatePastWorkView(LoginRequiredMixin, UpdateView):
     model = PastWork
-    fields = ['name', 'description', 'github_link', 'page_link']
+    fields = ['name', 'motivation', 'tools_used', 'description', 'github_link', 'page_link']
     template_name = 'update_pastwork.html'
 
 
