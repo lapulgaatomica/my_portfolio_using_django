@@ -49,6 +49,8 @@ class Message(models.Model):
 class PastWork(models.Model):
     name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=150)
+    motivation = models.TextField(blank=True, null=True)
+    tools_used = models.CharField(blank=True, null=True, max_length=250)
     github_link = models.URLField(max_length=100, unique=True)
     page_link = models.URLField(max_length=100, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
