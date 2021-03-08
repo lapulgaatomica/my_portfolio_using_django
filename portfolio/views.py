@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -95,7 +96,7 @@ class SendMessageView(SuccessMessageMixin, CreateView):
         sender_email = form["email"].value()
         message = f'{name_of_sender} says {reason}\n\nTheir exact statement was "{exact_message}"\n' \
                   f'Here is their email if you need to reach them: {sender_email}'
-        send_mail(subject, message, 'odedoyin25@gmail.com', ['akindeleodedoyin@gmail.com'], fail_silently=False)
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [f'{settings.EMAIL_RECEIVER}'], fail_silently=False)
         return super(SendMessageView, self).form_valid(form)
 
 

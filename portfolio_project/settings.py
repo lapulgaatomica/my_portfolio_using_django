@@ -14,7 +14,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
+# DEBUG = True
+# ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['akindeleodedoyin.herokuapp.com']
 
 
@@ -127,7 +128,7 @@ STATICFILES_FINDERS = [
 AUTH_USER_MODEL = 'users.CustomUser'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND_CONSOLE')
+# EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND_CONSOLE')
 # ADMIN_PAGE = 'admin/'
 # if not DEBUG:
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND_SMTP')
@@ -136,7 +137,7 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
-# ALLOWED_HOSTS = ['akindeleodedoyin.herokuapp.com']
+EMAIL_RECEIVER = os.environ.get('EMAIL_RECEIVER')
 ADMIN_PAGE = os.environ.get('ADMIN_PAGE')
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
@@ -149,4 +150,3 @@ SECURE_HSTS_PRELOAD = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
-
