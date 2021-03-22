@@ -1,27 +1,12 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse, resolve
 
-from .models import About, Competency, Reason, Message, PastWork
-from . import views
-
-
-def create_and_login_superuser(client):
-    get_user_model().objects.create_superuser(
-        username='delesuper',
-        email='dele@super.com',
-        password='password'
-    )
-    client.login(username='delesuper', password='password')
-
-
-def create_pastwork():
-    return PastWork.objects.create(name='Portfolio', description='My portfolio app',
-                                   github_link='https://github.com', page_link='https://app.com')
+from ..models import About, Competency, Reason, Message
+from .. import views
+from .utils import create_and_login_superuser, create_pastwork
 
 
 class HomepageTests(TestCase):
-
     def setUp(self):
         create_pastwork()
         url = reverse('home')

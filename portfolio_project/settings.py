@@ -13,10 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-# DEBUG = True
-# ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'akindeleodedoyin.herokuapp.com']
+DEBUG = True
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -128,7 +126,8 @@ STATICFILES_FINDERS = [
 AUTH_USER_MODEL = 'users.CustomUser'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND_CONSOLE')
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_RECEIVER = os.environ.get('EMAIL_RECEIVER')
 ADMIN_PAGE = 'admin/'
 if not DEBUG:
     EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND_SMTP')
@@ -137,7 +136,6 @@ if not DEBUG:
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
     EMAIL_PORT = os.environ.get('EMAIL_PORT')
     EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
-    EMAIL_RECEIVER = os.environ.get('EMAIL_RECEIVER')
     ALLOWED_HOSTS = [f'{os.environ.get("ALLOWED_HOST_FIRST")}', ]
     ADMIN_PAGE = os.environ.get('ADMIN_PAGE')
     SECURE_BROWSER_XSS_FILTER = True
