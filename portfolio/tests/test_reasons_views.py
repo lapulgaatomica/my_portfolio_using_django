@@ -1,8 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from .utils import create_and_login_superuser
+from .utils import create_and_login_superuser, create_reason
 from .. import views
-from ..models import Reason
 
 
 class ReasonsViewTestsForNormalUsers(TestCase):
@@ -62,8 +61,7 @@ class NewReasonViewTestsForSuperUsers(TestCase):
     def setUp(self):
         create_and_login_superuser(self.client)
         url = reverse('new_reason')
-        self.post_response = self.client.post(url,
-                                {'purpose': 'I want to hire you'}, follow=True)
+        self.post_response = self.client.post(url, {'purpose': 'I want to hire you'}, follow=True)
 
     def test_new_reason_view_status_code(self):
         self.assertEqual(self.post_response.status_code, 200)
@@ -82,9 +80,7 @@ class UpdateReasonViewTestsForNormalUsers(TestCase):
     reason = None
 
     def setUp(self):
-        self.reason = Reason.objects.create(
-            purpose='I want to hire you'
-        )
+        self.reason = create_reason()
         url = reverse('edit_reason', args=[str(self.reason.id)])
         self.response = self.client.get(url, follow=True)
 
@@ -99,12 +95,10 @@ class UpdateReasonViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
         create_and_login_superuser(self.client)
-        self.reason = Reason.objects.create(
-            purpose='I want to hire you'
-        )
+        self.reason = create_reason()
         url = reverse('edit_reason', args=[str(self.reason.id)])
         self.response = self.client.get(url)
-        self.post_response = self.client.post(url, {'purpose':'Want to hire you'}, follow=True)
+        self.post_response = self.client.post(url, {'purpose': 'Want to hire you'}, follow=True)
 
     def test_update_reason_view_status_code_for_super_user(self):
         self.assertEqual(self.response.status_code, 200)
@@ -140,9 +134,7 @@ class DeleteReasonViewTestsForNormalUsers(TestCase):
     reason = None
 
     def setUp(self):
-        self.reason = Reason.objects.create(
-            purpose='I want to hire you'
-        )
+        self.reason = create_reason()
         url = reverse('delete_reason', args=[str(self.reason.id)])
         self.response = self.client.get(url, follow=True)
 
@@ -157,9 +149,7 @@ class DeleteReasonViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
         create_and_login_superuser(self.client)
-        self.reason = Reason.objects.create(
-            purpose='I want to hire you'
-        )
+        self.reason = create_reason()
         url = reverse('delete_reason', args=[str(self.reason.id)])
         self.response = self.client.get(url)
         self.post_response = self.client.post(url, follow=True)

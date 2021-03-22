@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from ..models import Reason, Message
+from ..models import Message
 from .. import views
-from .utils import create_and_login_superuser
+from .utils import create_and_login_superuser, create_reason, create_message
 
 
 class SendMessageViewTests(TestCase):
@@ -10,7 +10,7 @@ class SendMessageViewTests(TestCase):
     message_query = None
 
     def setUp(self):
-        Reason.objects.create(purpose='I want to hire you')
+        create_reason()
         url = reverse('send_message')
         self.response = self.client.post(url,
                                          {'reason': '1',
@@ -40,8 +40,7 @@ class MessagesReceivedViewTestsForNormalUsers(TestCase):
     response = None
 
     def setUp(self):
-        reason = Reason.objects.create(purpose='I want to hire you')
-        Message.objects.create(reason=reason, name='Jane Doe', email='jane@doe.com', message='Hey Dele')
+        create_message()
         url = reverse('received_messages')
         self.response = self.client.get(url, follow=True)
 
@@ -54,8 +53,7 @@ class MessagesReceivedViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
         create_and_login_superuser(self.client)
-        reason = Reason.objects.create(purpose='I want to hire you')
-        Message.objects.create(reason=reason, name='Jane Doe', email='jane@doe.com', message='Hey Dele')
+        create_message()
         url = reverse('received_messages')
         self.response = self.client.get(url)
 

@@ -1,8 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from .utils import create_and_login_superuser
+from .utils import create_and_login_superuser, create_about
 from .. import views
-from ..models import About
 
 
 class NewAboutViewTestsForNormalUsers(TestCase):
@@ -59,9 +58,7 @@ class UpdateAboutViewTestsForNormalUsers(TestCase):
     about = None
 
     def setUp(self):
-        self.about = About.objects.create(
-            paragraph='I am a backend developer'
-        )
+        self.about = create_about()
         url = reverse('edit_about', args=[str(self.about.id)])
         self.response = self.client.get(url, follow=True)
 
@@ -76,9 +73,7 @@ class UpdateAboutViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
         create_and_login_superuser(self.client)
-        self.about = About.objects.create(
-            paragraph='I am a backend developer'
-        )
+        self.about = create_about()
         url = reverse('edit_about', args=[str(self.about.id)])
         self.response = self.client.get(url)
         self.post_response = self.client.post(url, {'paragraph': 'Edited I am a backend developer'}, follow=True)
@@ -116,9 +111,7 @@ class DeleteAboutViewTestsForNormalUsers(TestCase):
     about = None
 
     def setUp(self):
-        self.about = About.objects.create(
-            paragraph='I am a backend developer'
-        )
+        self.about = create_about()
         url = reverse('delete_about', args=[str(self.about.id)])
         self.response = self.client.get(url, follow=True)
 
@@ -133,9 +126,7 @@ class DeleteAboutViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
         create_and_login_superuser(self.client)
-        self.about = About.objects.create(
-            paragraph='I am a backend developer'
-        )
+        self.about = create_about()
         url = reverse('delete_about', args=[str(self.about.id)])
         self.response = self.client.get(url)
         self.post_response = self.client.post(url, follow=True)

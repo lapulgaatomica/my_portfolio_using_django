@@ -1,8 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from .utils import create_and_login_superuser
+from .utils import create_and_login_superuser, create_skill
 from .. import views
-from ..models import Competency
 
 
 class NewSkillViewTestsForNormalUsers(TestCase):
@@ -24,7 +23,7 @@ class NewSkillViewTestsForSuperUsers(TestCase):
         create_and_login_superuser(self.client)
         url = reverse('new_skill')
         self.response = self.client.get(url)
-        self.post_response = self.client.post(url, {'skill':'Devops'}, follow=True)
+        self.post_response = self.client.post(url, {'skill': 'Devops'}, follow=True)
 
     def test_new_skill_view_status_code_for_super_user(self):
         self.assertEqual(self.response.status_code, 200)
@@ -59,9 +58,7 @@ class UpdateSkillViewTestsForNormalUsers(TestCase):
     competency = None
 
     def setUp(self):
-        self.competency = Competency.objects.create(
-            skill='Development and Source Control (Docker, Git, Github)'
-        )
+        self.competency = create_skill()
         url = reverse('edit_skill', args=[str(self.competency.id)])
         self.response = self.client.get(url, follow=True)
 
@@ -76,9 +73,7 @@ class UpdateSkillViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
         create_and_login_superuser(self.client)
-        self.competency = Competency.objects.create(
-            skill='Development and Source Control (Docker, Git, Github)'
-        )
+        self.competency = create_skill()
         url = reverse('edit_skill', args=[str(self.competency.id)])
         self.response = self.client.get(url)
         self.post_response = self.client.post(url,
@@ -119,9 +114,7 @@ class DeleteSkillViewTestsForNormalUsers(TestCase):
     competency = None
 
     def setUp(self):
-        self.competency = Competency.objects.create(
-            skill='Development and Source Control (Docker, Git, Github)'
-        )
+        self.competency = create_skill()
         url = reverse('delete_skill', args=[str(self.competency.id)])
         self.response = self.client.get(url, follow=True)
 
@@ -136,9 +129,7 @@ class DeleteSkillViewTestsForSuperUsers(TestCase):
 
     def setUp(self):
         create_and_login_superuser(self.client)
-        self.competency = Competency.objects.create(
-            skill='Development and Source Control (Docker, Git, Github)'
-        )
+        self.competency = create_skill()
         url = reverse('delete_skill', args=[str(self.competency.id)])
         self.response = self.client.get(url)
         self.post_response = self.client.post(url, follow=True)
